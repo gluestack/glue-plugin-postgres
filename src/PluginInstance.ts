@@ -17,17 +17,20 @@ export class PluginInstance
   containerController: IContainerController;
   isOfTypeInstance: boolean = false;
   gluePluginStore: IGlueStorePlugin;
+  installationPath: string;
 
   constructor(
     app: IApp,
     callerPlugin: IPlugin,
     name: string,
     gluePluginStore: IGlueStorePlugin,
+    installationPath: string,
   ) {
     this.app = app;
     this.name = name;
     this.callerPlugin = callerPlugin;
     this.gluePluginStore = gluePluginStore;
+    this.installationPath = installationPath;
     this.containerController = new PluginInstanceContainerController(app, this);
   }
 
@@ -45,6 +48,10 @@ export class PluginInstance
 
   getCallerPlugin(): IPlugin {
     return this.callerPlugin;
+  }
+
+  getInstallationPath(): string {
+    return this.installationPath;
   }
 
   getContainerController(): IContainerController {

@@ -46,6 +46,7 @@ var postgres_1 = require("./commands/postgres");
 var postgresConfig_1 = require("./commands/postgresConfig");
 var GlueStackPlugin = (function () {
     function GlueStackPlugin(app, gluePluginStore) {
+        this.type = "stateless";
         this.app = app;
         this.instances = [];
         this.gluePluginStore = gluePluginStore;
@@ -62,8 +63,14 @@ var GlueStackPlugin = (function () {
     GlueStackPlugin.prototype.getVersion = function () {
         return package_json_1["default"].version;
     };
+    GlueStackPlugin.prototype.getType = function () {
+        return this.type;
+    };
     GlueStackPlugin.prototype.getTemplateFolderPath = function () {
         return "".concat(process.cwd(), "/node_modules/").concat(this.getName(), "/template");
+    };
+    GlueStackPlugin.prototype.getInstallationPath = function (target) {
+        return "./".concat(target);
     };
     GlueStackPlugin.prototype.runPostInstall = function (instanceName, target) {
         return __awaiter(this, void 0, void 0, function () {
@@ -83,8 +90,8 @@ var GlueStackPlugin = (function () {
             });
         });
     };
-    GlueStackPlugin.prototype.createInstance = function (key, gluePluginStore) {
-        var instance = new PluginInstance_1.PluginInstance(this.app, this, key, gluePluginStore);
+    GlueStackPlugin.prototype.createInstance = function (key, gluePluginStore, installationPath) {
+        var instance = new PluginInstance_1.PluginInstance(this.app, this, key, gluePluginStore, installationPath);
         this.instances.push(instance);
         return instance;
     };

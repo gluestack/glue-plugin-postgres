@@ -14,6 +14,7 @@ import { writeInstance } from "./commands/postgresConfig";
 export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
   app: IApp;
   instances: IInstance[];
+  type: "stateless" | "stateful" | "devonly" = "stateless";
   gluePluginStore: IGlueStorePlugin;
 
   constructor(app: IApp, gluePluginStore: IGlueStorePlugin) {
@@ -38,24 +39,42 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     return packageJSON.version;
   }
 
+  getType(): "stateless" | "stateful" | "devonly" {
+    return this.type;
+  }
+
   getTemplateFolderPath(): string {
     return `${process.cwd()}/node_modules/${this.getName()}/template`;
   }
 
+  getInstallationPath(target: string): string {
+    return `./${target}`;
+  }
+
   async runPostInstall(instanceName: string, target: string) {
-    const instance:PluginInstance = await this.app.createPluginInstance(
+    const instance: PluginInstance = await this.app.createPluginInstance(
       this,
       instanceName,
       null,
       null,
     );
     if (instance) {
-      await writeInstance(instance)
+      await writeInstance(instance);
     }
   }
 
-  createInstance(key: string, gluePluginStore: IGlueStorePlugin): IInstance {
-    const instance = new PluginInstance(this.app, this, key, gluePluginStore);
+  createInstance(
+    key: string,
+    gluePluginStore: IGlueStorePlugin,
+    installationPath: string,
+  ): IInstance {
+    const instance = new PluginInstance(
+      this.app,
+      this,
+      key,
+      gluePluginStore,
+      installationPath,
+    );
     this.instances.push(instance);
     return instance;
   }
