@@ -72,28 +72,25 @@ export class PluginInstanceContainerController implements IContainerController {
         Retries: 50,
         StartPeriod: this.toNano(30),
       },
-      ...(await this.getVolumes()),
+      Binds: [
+        `${this.getDbPath()}:/var/lib/postgresql/data/`,
+        `${this.getInitDbPath()}/init.db`,
+      ],
     };
   }
 
-  async getVolumes() {
-    if (!(await sqlFileExists(this))) {
-      return {
-        Volumes: {
-          [this.getDbPath()]: "/var/lib/postgresql/data/",
-          [this.getInitDbPath()]: "/docker-entrypoint-initdb.d/",
-        },
-      };
-    }
-    return {};
-  }
-
   getDbPath() {
-    return `${this.callerInstance.getInstallationPath()}/db`;
+    return (
+      process.cwd() +
+      `${this.callerInstance.getInstallationPath().substring(1)}/db`
+    );
   }
 
   getInitDbPath() {
-    return `${this.callerInstance.getInstallationPath()}/init.db`;
+    return (
+      process.cwd() +
+      `${this.callerInstance.getInstallationPath().substring(1)}/init.db`
+    );
   }
 
   toNano(time: number): number {
@@ -148,7 +145,6 @@ export class PluginInstanceContainerController implements IContainerController {
 
     await new Promise(async (resolve, reject) => {
       await writeDbCreateSql(this);
-
       DockerodeHelper.getPort(this.getPortNumber(true), ports)
         .then(async (port: number) => {
           this.portNumber = port;
