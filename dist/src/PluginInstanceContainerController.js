@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,6 +49,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.PluginInstanceContainerController = void 0;
 var DockerodeHelper = require("@gluestack/helpers").DockerodeHelper;
+var dbInit_1 = require("./helpers/dbInit");
+var postgresConfig_1 = require("./commands/postgresConfig");
 var PluginInstanceContainerController = (function () {
     function PluginInstanceContainerController(app, callerInstance) {
         this.status = "down";
@@ -51,12 +64,9 @@ var PluginInstanceContainerController = (function () {
         return this.callerInstance;
     };
     PluginInstanceContainerController.prototype.getEnv = function () {
-        var db_config = {
-            db_name: "default",
-            username: "postgres",
-            password: "goldtree9"
-        };
-        if (!this.callerInstance.gluePluginStore.get("db_config") || !this.callerInstance.gluePluginStore.get("db_config").db_name)
+        var db_config = postgresConfig_1.defaultConfig;
+        if (!this.callerInstance.gluePluginStore.get("db_config") ||
+            !this.callerInstance.gluePluginStore.get("db_config").db_name)
             this.callerInstance.gluePluginStore.set("db_config", db_config);
         db_config = this.callerInstance.gluePluginStore.get("db_config");
         return {
@@ -66,22 +76,64 @@ var PluginInstanceContainerController = (function () {
         };
     };
     PluginInstanceContainerController.prototype.getDockerJson = function () {
-        return {
-            Image: "postgres:12",
-            WorkingDir: "/app",
-            HostConfig: {
-                PortBindings: {
-                    "5432/tcp": [
-                        {
-                            HostPort: this.getPortNumber(true).toString()
-                        },
-                    ]
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = [{ Image: "postgres:12", WorkingDir: "/app", HostConfig: {
+                                    PortBindings: {
+                                        "5432/tcp": [
+                                            {
+                                                HostPort: this.getPortNumber(true).toString()
+                                            },
+                                        ]
+                                    }
+                                }, ExposedPorts: {
+                                    "5432/tcp": {}
+                                }, RestartPolicy: {
+                                    Name: "always"
+                                }, Healthcheck: {
+                                    Test: ["CMD-SHELL", "pg_isready -U ".concat(this.getEnv().POSTGRES_USER)],
+                                    Interval: this.toNano(10),
+                                    Timeout: this.toNano(10),
+                                    Retries: 50,
+                                    StartPeriod: this.toNano(30)
+                                } }];
+                        return [4, this.getVolumes()];
+                    case 1: return [2, __assign.apply(void 0, _a.concat([(_b.sent())]))];
                 }
-            },
-            ExposedPorts: {
-                "5432/tcp": {}
-            }
-        };
+            });
+        });
+    };
+    PluginInstanceContainerController.prototype.getVolumes = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4, (0, dbInit_1.sqlFileExists)(this)];
+                    case 1:
+                        if (!(_b.sent())) {
+                            return [2, {
+                                    Volumes: (_a = {},
+                                        _a[this.getDbPath()] = "/var/lib/postgresql/data/",
+                                        _a[this.getInitDbPath()] = "/docker-entrypoint-initdb.d/",
+                                        _a)
+                                }];
+                        }
+                        return [2, {}];
+                }
+            });
+        });
+    };
+    PluginInstanceContainerController.prototype.getDbPath = function () {
+        return "".concat(this.callerInstance.getInstallationPath(), "/db");
+    };
+    PluginInstanceContainerController.prototype.getInitDbPath = function () {
+        return "".concat(this.callerInstance.getInstallationPath(), "/init.db");
+    };
+    PluginInstanceContainerController.prototype.toNano = function (time) {
+        return time * Math.pow(10, 9);
     };
     PluginInstanceContainerController.prototype.getStatus = function () {
         return this.status;
@@ -125,26 +177,44 @@ var PluginInstanceContainerController = (function () {
                         return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                                 var _this = this;
                                 return __generator(this, function (_a) {
-                                    DockerodeHelper.getPort(this.getPortNumber(true), ports)
-                                        .then(function (port) {
-                                        _this.portNumber = port;
-                                        DockerodeHelper.up(_this.getDockerJson(), _this.getEnv(), _this.portNumber, _this.callerInstance.getName())
-                                            .then(function (_a) {
-                                            var status = _a.status, portNumber = _a.portNumber, containerId = _a.containerId;
-                                            DockerodeHelper.generateDockerFile(_this.getDockerJson(), _this.getEnv(), _this.callerInstance.getName());
-                                            _this.setStatus(status);
-                                            _this.setPortNumber(portNumber);
-                                            _this.setContainerId(containerId);
-                                            ports.push(portNumber);
-                                            _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
-                                            return resolve(true);
-                                        })["catch"](function (e) {
-                                            return reject(e);
-                                        });
-                                    })["catch"](function (e) {
-                                        return reject(e);
-                                    });
-                                    return [2];
+                                    switch (_a.label) {
+                                        case 0: return [4, (0, dbInit_1.writeDbCreateSql)(this)];
+                                        case 1:
+                                            _a.sent();
+                                            DockerodeHelper.getPort(this.getPortNumber(true), ports)
+                                                .then(function (port) { return __awaiter(_this, void 0, void 0, function () {
+                                                var _a, _b;
+                                                var _this = this;
+                                                return __generator(this, function (_c) {
+                                                    switch (_c.label) {
+                                                        case 0:
+                                                            this.portNumber = port;
+                                                            _b = (_a = DockerodeHelper).up;
+                                                            return [4, this.getDockerJson()];
+                                                        case 1:
+                                                            _b.apply(_a, [_c.sent(), this.getEnv(),
+                                                                this.portNumber,
+                                                                this.callerInstance.getName()])
+                                                                .then(function (_a) {
+                                                                var status = _a.status, portNumber = _a.portNumber, containerId = _a.containerId;
+                                                                DockerodeHelper.generateDockerFile(_this.getDockerJson(), _this.getEnv(), _this.callerInstance.getName());
+                                                                _this.setStatus(status);
+                                                                _this.setPortNumber(portNumber);
+                                                                _this.setContainerId(containerId);
+                                                                ports.push(portNumber);
+                                                                _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
+                                                                return resolve(true);
+                                                            })["catch"](function (e) {
+                                                                return reject(e);
+                                                            });
+                                                            return [2];
+                                                    }
+                                                });
+                                            }); })["catch"](function (e) {
+                                                return reject(e);
+                                            });
+                                            return [2];
+                                    }
                                 });
                             }); })];
                     case 1:

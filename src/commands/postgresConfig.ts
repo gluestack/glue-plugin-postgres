@@ -10,25 +10,31 @@ interface IQuestion {
   initial: string;
 }
 
+export const defaultConfig = {
+  db_name: "my_first_db",
+  username: "postgres",
+  password: "postgrespass",
+};
+
 const getNewInstanceQuestions = (oldConfig: any): IQuestion[] => {
   return [
     {
       type: "text",
       name: "db_name",
       message: "What would be your postgres database name?",
-      initial: oldConfig?.db_name || "my_first_db",
+      initial: oldConfig?.db_name || defaultConfig.db_name,
     },
     {
       type: "text",
       name: "username",
       message: "What would be your postgres database username?",
-      initial: oldConfig?.username || "postgres",
+      initial: oldConfig?.username || defaultConfig.username,
     },
     {
       type: "text",
       name: "password",
       message: "What would be your postgres database password?",
-      initial: oldConfig?.password || "goldtree9",
+      initial: oldConfig?.password || defaultConfig.password,
     },
   ];
 };

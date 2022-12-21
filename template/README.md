@@ -1,1 +1,1 @@
-@glue/glue-plugin-helpers
+@gluestack/glue-plugin-postgres

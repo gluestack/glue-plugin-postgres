@@ -31,7 +31,7 @@ var PluginInstance = (function () {
     PluginInstance.prototype.getConnectionString = function () {
         var db_config = this.gluePluginStore.get("db_config");
         if (db_config) {
-            return "postgresql://".concat(db_config.username, ":").concat(db_config.password, "@").concat(this.getName(), ":").concat(this.getContainerController().getPortNumber(), "/").concat(db_config.db_name);
+            return "postgresql://".concat(db_config.username, ":").concat(db_config.password, "@host.docker.internal:").concat(this.getContainerController().getPortNumber(), "/").concat(db_config.db_name);
         }
         return "";
     };

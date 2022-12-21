@@ -36,27 +36,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.postgresConfig = exports.writeInstance = void 0;
+exports.postgresConfig = exports.writeInstance = exports.defaultConfig = void 0;
 var prompts = require("prompts");
+exports.defaultConfig = {
+    db_name: "my_first_db",
+    username: "postgres",
+    password: "postgrespass"
+};
 var getNewInstanceQuestions = function (oldConfig) {
     return [
         {
             type: "text",
             name: "db_name",
             message: "What would be your postgres database name?",
-            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.db_name) || "my_first_db"
+            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.db_name) || exports.defaultConfig.db_name
         },
         {
             type: "text",
             name: "username",
             message: "What would be your postgres database username?",
-            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.username) || "postgres"
+            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.username) || exports.defaultConfig.username
         },
         {
             type: "text",
             name: "password",
             message: "What would be your postgres database password?",
-            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.password) || "goldtree9"
+            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.password) || exports.defaultConfig.password
         },
     ];
 };

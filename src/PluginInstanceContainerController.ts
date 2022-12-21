@@ -3,6 +3,8 @@ import IApp from "@gluestack/framework/types/app/interface/IApp";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
 import { IPostgres } from "./interfaces/IPostgres";
+import { sqlFileExists, writeDbCreateSql } from "./helpers/dbInit";
+import { defaultConfig } from "./commands/postgresConfig";
 
 export class PluginInstanceContainerController implements IContainerController {
   app: IApp;
@@ -27,13 +29,12 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   getEnv() {
-    let db_config = {
-      db_name: "default",
-      username: "postgres",
-      password: "goldtree9",
-    };
+    let db_config = defaultConfig;
 
-    if (!this.callerInstance.gluePluginStore.get("db_config") || !this.callerInstance.gluePluginStore.get("db_config").db_name)
+    if (
+      !this.callerInstance.gluePluginStore.get("db_config") ||
+      !this.callerInstance.gluePluginStore.get("db_config").db_name
+    )
       this.callerInstance.gluePluginStore.set("db_config", db_config);
 
     db_config = this.callerInstance.gluePluginStore.get("db_config");
@@ -45,7 +46,7 @@ export class PluginInstanceContainerController implements IContainerController {
     };
   }
 
-  getDockerJson() {
+  async getDockerJson() {
     return {
       Image: "postgres:12",
       WorkingDir: "/app",
@@ -60,8 +61,43 @@ export class PluginInstanceContainerController implements IContainerController {
       },
       ExposedPorts: {
         "5432/tcp": {},
-      }
+      },
+      RestartPolicy: {
+        Name: "always",
+      },
+      Healthcheck: {
+        Test: ["CMD-SHELL", `pg_isready -U ${this.getEnv().POSTGRES_USER}`],
+        Interval: this.toNano(10),
+        Timeout: this.toNano(10),
+        Retries: 50,
+        StartPeriod: this.toNano(30),
+      },
+      ...(await this.getVolumes()),
     };
+  }
+
+  async getVolumes() {
+    if (!(await sqlFileExists(this))) {
+      return {
+        Volumes: {
+          [this.getDbPath()]: "/var/lib/postgresql/data/",
+          [this.getInitDbPath()]: "/docker-entrypoint-initdb.d/",
+        },
+      };
+    }
+    return {};
+  }
+
+  getDbPath() {
+    return `${this.callerInstance.getInstallationPath()}/db`;
+  }
+
+  getInitDbPath() {
+    return `${this.callerInstance.getInstallationPath()}/init.db`;
+  }
+
+  toNano(time: number): number {
+    return time * Math.pow(10, 9);
   }
 
   getStatus(): "up" | "down" {
@@ -111,11 +147,13 @@ export class PluginInstanceContainerController implements IContainerController {
       this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
 
     await new Promise(async (resolve, reject) => {
+      await writeDbCreateSql(this);
+
       DockerodeHelper.getPort(this.getPortNumber(true), ports)
-        .then((port: number) => {
+        .then(async (port: number) => {
           this.portNumber = port;
           DockerodeHelper.up(
-            this.getDockerJson(),
+            await this.getDockerJson(),
             this.getEnv(),
             this.portNumber,
             this.callerInstance.getName(),
@@ -131,9 +169,11 @@ export class PluginInstanceContainerController implements IContainerController {
                 containerId: string;
                 dockerfile: string;
               }) => {
-                DockerodeHelper.generateDockerFile(this.getDockerJson(),
-                this.getEnv(),
-                this.callerInstance.getName())
+                DockerodeHelper.generateDockerFile(
+                  this.getDockerJson(),
+                  this.getEnv(),
+                  this.callerInstance.getName(),
+                );
                 this.setStatus(status);
                 this.setPortNumber(portNumber);
                 this.setContainerId(containerId);
