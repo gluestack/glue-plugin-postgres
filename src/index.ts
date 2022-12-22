@@ -14,7 +14,7 @@ import { writeInstance } from "./commands/postgresConfig";
 export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
   app: IApp;
   instances: IInstance[];
-  type: "stateless" | "stateful" | "devonly" = "stateless";
+  type: "stateless" | "stateful" | "devonly" = "stateful";
   gluePluginStore: IGlueStorePlugin;
 
   constructor(app: IApp, gluePluginStore: IGlueStorePlugin) {

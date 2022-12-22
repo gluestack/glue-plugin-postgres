@@ -46,7 +46,7 @@ var postgres_1 = require("./commands/postgres");
 var postgresConfig_1 = require("./commands/postgresConfig");
 var GlueStackPlugin = (function () {
     function GlueStackPlugin(app, gluePluginStore) {
-        this.type = "stateless";
+        this.type = "stateful";
         this.app = app;
         this.instances = [];
         this.gluePluginStore = gluePluginStore;
