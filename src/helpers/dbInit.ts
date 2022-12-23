@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { PluginInstanceContainerController } from "src/PluginInstanceContainerController";
+import { PluginInstanceContainerController } from "..//PluginInstanceContainerController";
 
 export function getSqlFilePath(
   containerController: PluginInstanceContainerController,

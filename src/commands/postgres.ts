@@ -1,4 +1,4 @@
-import { GlueStackPlugin } from "src";
+import { GlueStackPlugin } from "../";
 import { postgresConfig } from "./postgresConfig";
 import { postgresList } from "./postgresList";
 

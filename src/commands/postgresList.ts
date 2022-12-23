@@ -1,5 +1,5 @@
-import { GlueStackPlugin } from "src";
-import { PluginInstance } from "src/PluginInstance";
+import { GlueStackPlugin } from "../";
+import { PluginInstance } from "..//PluginInstance";
 
 export async function postgresList(glueStackPlugin: GlueStackPlugin) {
   const arr = glueStackPlugin.getInstances().map((instance: PluginInstance) => {

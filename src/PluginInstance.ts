@@ -31,6 +31,7 @@ export class PluginInstance
     this.callerPlugin = callerPlugin;
     this.gluePluginStore = gluePluginStore;
     this.installationPath = installationPath;
+    //@ts-ignore
     this.containerController = new PluginInstanceContainerController(app, this);
   }
 
@@ -58,12 +59,12 @@ export class PluginInstance
     return this.containerController;
   }
 
-  getConnectionString(): string {
+  async getConnectionString() {
     let db_config = this.gluePluginStore.get("db_config");
     if (db_config) {
       return `postgresql://${db_config.username}:${
         db_config.password
-      }@host.docker.internal:${this.getContainerController().getPortNumber()}/${
+      }@host.docker.internal:${await this.getContainerController().getPortNumber()}/${
         db_config.db_name
       }`;
     }

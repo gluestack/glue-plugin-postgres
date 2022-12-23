@@ -1,6 +1,6 @@
 const prompts = require("prompts");
-import { GlueStackPlugin } from "src";
-import { PluginInstance } from "src/PluginInstance";
+import { GlueStackPlugin } from "../";
+import { PluginInstance } from "..//PluginInstance";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 
 interface IQuestion {

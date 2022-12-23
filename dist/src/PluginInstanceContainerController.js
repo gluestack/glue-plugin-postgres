@@ -66,37 +66,45 @@ var PluginInstanceContainerController = (function () {
     };
     PluginInstanceContainerController.prototype.getDockerJson = function () {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2, {
-                        Image: "postgres:12",
-                        WorkingDir: "/app",
-                        HostConfig: {
-                            PortBindings: {
-                                "5432/tcp": [
-                                    {
-                                        HostPort: this.getPortNumber(true).toString()
-                                    },
-                                ]
-                            }
-                        },
-                        ExposedPorts: {
-                            "5432/tcp": {}
-                        },
-                        RestartPolicy: {
-                            Name: "always"
-                        },
-                        Healthcheck: {
-                            Test: ["CMD-SHELL", "pg_isready -U ".concat(this.getEnv().POSTGRES_USER)],
-                            Interval: this.toNano(10),
-                            Timeout: this.toNano(10),
-                            Retries: 50,
-                            StartPeriod: this.toNano(30)
-                        },
-                        Binds: [
-                            "".concat(this.getDbPath(), ":/var/lib/postgresql/data/"),
-                            "".concat(this.getInitDbPath(), "/init.db"),
-                        ]
-                    }];
+            var _a;
+            var _b, _c, _d, _e;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
+                    case 0:
+                        _b = {
+                            Image: "postgres:12",
+                            WorkingDir: "/app"
+                        };
+                        _c = {};
+                        _d = {};
+                        _a = "5432/tcp";
+                        _e = {};
+                        return [4, this.getPortNumber()];
+                    case 1: return [2, (_b.HostConfig = (_c.PortBindings = (_d[_a] = [
+                            (_e.HostPort = (_f.sent()).toString(),
+                                _e)
+                        ],
+                            _d),
+                            _c),
+                            _b.ExposedPorts = {
+                                "5432/tcp": {}
+                            },
+                            _b.RestartPolicy = {
+                                Name: "always"
+                            },
+                            _b.Healthcheck = {
+                                Test: ["CMD-SHELL", "pg_isready -U ".concat(this.getEnv().POSTGRES_USER)],
+                                Interval: this.toNano(10),
+                                Timeout: this.toNano(10),
+                                Retries: 50,
+                                StartPeriod: this.toNano(30)
+                            },
+                            _b.Binds = [
+                                "".concat(this.getDbPath(), ":/var/lib/postgresql/data/"),
+                                "".concat(this.getInitDbPath(), "/init.db"),
+                            ],
+                            _b)];
+                }
             });
         });
     };
@@ -115,12 +123,26 @@ var PluginInstanceContainerController = (function () {
         return this.status;
     };
     PluginInstanceContainerController.prototype.getPortNumber = function (returnDefault) {
-        if (this.portNumber) {
-            return this.portNumber;
-        }
-        if (returnDefault) {
-            return 5432;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2, new Promise(function (resolve, reject) {
+                        if (_this.portNumber) {
+                            return resolve(_this.portNumber);
+                        }
+                        var ports = _this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
+                        DockerodeHelper.getPort(5490, ports)
+                            .then(function (port) {
+                            _this.setPortNumber(port);
+                            ports.push(port);
+                            _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
+                            return resolve(_this.portNumber);
+                        })["catch"](function (e) {
+                            reject(e);
+                        });
+                    })];
+            });
+        });
     };
     PluginInstanceContainerController.prototype.getContainerId = function () {
         return this.containerId;
@@ -144,55 +166,51 @@ var PluginInstanceContainerController = (function () {
     PluginInstanceContainerController.prototype.getConfig = function () { };
     PluginInstanceContainerController.prototype.up = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var ports;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        ports = this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-                        return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                                var _this = this;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0: return [4, (0, dbInit_1.writeDbCreateSql)(this)];
-                                        case 1:
-                                            _a.sent();
-                                            DockerodeHelper.getPort(this.getPortNumber(true), ports)
-                                                .then(function (port) { return __awaiter(_this, void 0, void 0, function () {
-                                                var _a, _b;
-                                                var _this = this;
-                                                return __generator(this, function (_c) {
-                                                    switch (_c.label) {
+                    case 0: return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                            var _a, _b, _c;
+                            var _this = this;
+                            return __generator(this, function (_d) {
+                                switch (_d.label) {
+                                    case 0: return [4, (0, dbInit_1.writeDbCreateSql)(this)];
+                                    case 1:
+                                        _d.sent();
+                                        _b = (_a = DockerodeHelper).up;
+                                        return [4, this.getDockerJson()];
+                                    case 2:
+                                        _c = [_d.sent(), this.getEnv()];
+                                        return [4, this.getPortNumber()];
+                                    case 3:
+                                        _b.apply(_a, _c.concat([_d.sent(), this.callerInstance.getName()]))
+                                            .then(function (_a) {
+                                            var status = _a.status, containerId = _a.containerId;
+                                            return __awaiter(_this, void 0, void 0, function () {
+                                                var _b, _c;
+                                                return __generator(this, function (_d) {
+                                                    switch (_d.label) {
                                                         case 0:
-                                                            this.portNumber = port;
-                                                            _b = (_a = DockerodeHelper).up;
-                                                            return [4, this.getDockerJson()];
+                                                            this.setStatus(status);
+                                                            this.setContainerId(containerId);
+                                                            console.log("\x1b[36m");
+                                                            console.log("Postgresql connection string: ");
+                                                            _c = (_b = console).log;
+                                                            return [4, this.callerInstance.getConnectionString()];
                                                         case 1:
-                                                            _b.apply(_a, [_c.sent(), this.getEnv(),
-                                                                this.portNumber,
-                                                                this.callerInstance.getName()])
-                                                                .then(function (_a) {
-                                                                var status = _a.status, portNumber = _a.portNumber, containerId = _a.containerId;
-                                                                DockerodeHelper.generateDockerFile(_this.getDockerJson(), _this.getEnv(), _this.callerInstance.getName());
-                                                                _this.setStatus(status);
-                                                                _this.setPortNumber(portNumber);
-                                                                _this.setContainerId(containerId);
-                                                                ports.push(portNumber);
-                                                                _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
-                                                                return resolve(true);
-                                                            })["catch"](function (e) {
-                                                                return reject(e);
-                                                            });
-                                                            return [2];
+                                                            _c.apply(_b, [_d.sent()]);
+                                                            console.log("\x1b[0m");
+                                                            return [2, resolve(true)];
                                                     }
                                                 });
-                                            }); })["catch"](function (e) {
-                                                return reject(e);
                                             });
-                                            return [2];
-                                    }
-                                });
-                            }); })];
+                                        })["catch"](function (e) {
+                                            return reject(e);
+                                        });
+                                        return [2];
+                                }
+                            });
+                        }); })];
                     case 1:
                         _a.sent();
                         return [2];
@@ -202,32 +220,23 @@ var PluginInstanceContainerController = (function () {
     };
     PluginInstanceContainerController.prototype.down = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var ports;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        ports = this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-                        return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                                var _this = this;
-                                return __generator(this, function (_a) {
-                                    DockerodeHelper.down(this.getContainerId(), this.callerInstance.getName())
-                                        .then(function () {
-                                        _this.setStatus("down");
-                                        var index = ports.indexOf(_this.getPortNumber());
-                                        if (index !== -1) {
-                                            ports.splice(index, 1);
-                                        }
-                                        _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
-                                        _this.setPortNumber(null);
-                                        _this.setContainerId(null);
-                                        return resolve(true);
-                                    })["catch"](function (e) {
-                                        return reject(e);
-                                    });
-                                    return [2];
+                    case 0: return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                DockerodeHelper.down(this.getContainerId(), this.callerInstance.getName())
+                                    .then(function () {
+                                    _this.setStatus("down");
+                                    _this.setContainerId(null);
+                                    return resolve(true);
+                                })["catch"](function (e) {
+                                    return reject(e);
                                 });
-                            }); })];
+                                return [2];
+                            });
+                        }); })];
                     case 1:
                         _a.sent();
                         return [2];

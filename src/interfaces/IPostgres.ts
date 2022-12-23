@@ -1,3 +1,3 @@
 export interface IPostgres {
-    getConnectionString(): string
+  getConnectionString(): any;
 }
