@@ -72,6 +72,7 @@ var writeInstance = function (pluginInstance) { return __awaiter(void 0, void 0,
             case 0: return [4, prompts(getNewInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")))];
             case 1:
                 response = _a.sent();
+                Object.keys(response).forEach(function (key) { return response[key] = response[key].trim(); });
                 pluginInstance.gluePluginStore.set("db_config", response);
                 console.log();
                 console.log("Saved ".concat(pluginInstance.getName(), " config"));

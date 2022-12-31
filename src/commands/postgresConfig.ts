@@ -43,6 +43,10 @@ export const writeInstance = async (pluginInstance: PluginInstance) => {
   const response = await prompts(
     getNewInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")),
   );
+
+  // trim the values in an object
+  Object.keys(response).forEach(key => response[key] = response[key].trim());
+
   pluginInstance.gluePluginStore.set("db_config", response);
   console.log();
   console.log(`Saved ${pluginInstance.getName()} config`);
