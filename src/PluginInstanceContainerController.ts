@@ -3,7 +3,7 @@ import IApp from "@gluestack/framework/types/app/interface/IApp";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
 import { IPostgres } from "./interfaces/IPostgres";
-import { sqlFileExists, writeDbCreateSql } from "./helpers/dbInit";
+import { connectionCheck, writeDbCreateSql } from "./helpers/dbInit";
 import { defaultConfig } from "./commands/postgresConfig";
 
 export class PluginInstanceContainerController implements IContainerController {
@@ -171,10 +171,13 @@ export class PluginInstanceContainerController implements IContainerController {
             this.setStatus(status);
             this.setContainerId(containerId);
 
+            const connection: string = await this.callerInstance.getConnectionString();
             console.log("\x1b[36m");
             console.log(`Postgresql connection string: `);
-            console.log(await this.callerInstance.getConnectionString());
+            console.log(connection);
             console.log("\x1b[0m");
+
+            await connectionCheck(connection);
 
             return resolve(true);
           },

@@ -187,19 +187,22 @@ var PluginInstanceContainerController = (function () {
                                             .then(function (_a) {
                                             var status = _a.status, containerId = _a.containerId;
                                             return __awaiter(_this, void 0, void 0, function () {
-                                                var _b, _c;
-                                                return __generator(this, function (_d) {
-                                                    switch (_d.label) {
+                                                var connection;
+                                                return __generator(this, function (_b) {
+                                                    switch (_b.label) {
                                                         case 0:
                                                             this.setStatus(status);
                                                             this.setContainerId(containerId);
-                                                            console.log("\x1b[36m");
-                                                            console.log("Postgresql connection string: ");
-                                                            _c = (_b = console).log;
                                                             return [4, this.callerInstance.getConnectionString()];
                                                         case 1:
-                                                            _c.apply(_b, [_d.sent()]);
+                                                            connection = _b.sent();
+                                                            console.log("\x1b[36m");
+                                                            console.log("Postgresql connection string: ");
+                                                            console.log(connection);
                                                             console.log("\x1b[0m");
+                                                            return [4, (0, dbInit_1.connectionCheck)(connection)];
+                                                        case 2:
+                                                            _b.sent();
                                                             return [2, resolve(true)];
                                                     }
                                                 });
