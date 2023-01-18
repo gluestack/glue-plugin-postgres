@@ -32,7 +32,7 @@ export const connectionCheck = async (connection: string, retry: number = 0): Pr
     await waitInSeconds(2);
 
   } catch (error) {
-    console.log('> [postgres] still initialising...');
+    console.log('[postgres] still initialising...');
 
     retry += 1;
     if (retry > 4) {

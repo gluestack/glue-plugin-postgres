@@ -109,7 +109,7 @@ export class PluginInstanceContainerController implements IContainerController {
       }
       let ports =
         this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-      DockerodeHelper.getPort(5490, ports)
+      DockerodeHelper.getPort(5432, ports)
         .then((port: number) => {
           this.setPortNumber(port);
           ports.push(port);
@@ -152,54 +152,11 @@ export class PluginInstanceContainerController implements IContainerController {
   getConfig(): any {}
 
   async up() {
-    await new Promise(async (resolve, reject) => {
-      await writeDbCreateSql(this);
-      DockerodeHelper.up(
-        await this.getDockerJson(),
-        this.getEnv(),
-        await this.getPortNumber(),
-        this.callerInstance.getName(),
-      )
-        .then(
-          async ({
-            status,
-            containerId,
-          }: {
-            status: "up" | "down";
-            containerId: string;
-          }) => {
-            this.setStatus(status);
-            this.setContainerId(containerId);
-
-            const connection: string = await this.callerInstance.getConnectionString();
-            console.log("\x1b[36m");
-            console.log(`Postgresql connection string: `);
-            console.log(connection);
-            console.log("\x1b[0m");
-
-            await connectionCheck(connection);
-
-            return resolve(true);
-          },
-        )
-        .catch((e: any) => {
-          return reject(e);
-        });
-    });
+    //
   }
 
   async down() {
-    await new Promise(async (resolve, reject) => {
-      DockerodeHelper.down(this.getContainerId(), this.callerInstance.getName())
-        .then(() => {
-          this.setStatus("down");
-          this.setContainerId(null);
-          return resolve(true);
-        })
-        .catch((e: any) => {
-          return reject(e);
-        });
-    });
+    //
   }
 
   async build() {}

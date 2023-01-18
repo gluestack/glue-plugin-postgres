@@ -102,7 +102,7 @@ var connectionCheck = function (connection, retry) {
                     return [3, 9];
                 case 6:
                     error_1 = _a.sent();
-                    console.log('> [postgres] still initialising...');
+                    console.log('[postgres] still initialising...');
                     retry += 1;
                     if (retry > 4) {
                         console.log('> [postgres] is not responding, please check your docker logs');
