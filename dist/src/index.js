@@ -44,6 +44,7 @@ var package_json_1 = __importDefault(require("../package.json"));
 var PluginInstance_1 = require("./PluginInstance");
 var postgres_1 = require("./commands/postgres");
 var postgresConfig_1 = require("./commands/postgresConfig");
+var create_folder_1 = require("./helpers/create-folder");
 var GlueStackPlugin = (function () {
     function GlueStackPlugin(app, gluePluginStore) {
         this.type = "stateful";
@@ -80,12 +81,15 @@ var GlueStackPlugin = (function () {
                     case 0: return [4, this.app.createPluginInstance(this, instanceName, this.getTemplateFolderPath(), target)];
                     case 1:
                         instance = _a.sent();
-                        if (!instance) return [3, 3];
+                        if (!instance) return [3, 4];
                         return [4, (0, postgresConfig_1.writeInstance)(instance)];
                     case 2:
                         _a.sent();
-                        _a.label = 3;
-                    case 3: return [2];
+                        return [4, (0, create_folder_1.createFolder)("".concat(instance.getInstallationPath(), "/db"))];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2];
                 }
             });
         });

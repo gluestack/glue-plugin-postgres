@@ -59,68 +59,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.writeDbCreateSql = exports.sqlFileExists = exports.getSqlFilePath = exports.connectionCheck = exports.waitInSeconds = void 0;
+exports.writeDbCreateSql = exports.sqlFileExists = exports.getSqlFilePath = void 0;
 var fs = __importStar(require("fs"));
-var pg_1 = require("pg");
-var waitInSeconds = function (seconds) {
-    return new Promise(function (resolve) {
-        setTimeout(function () {
-            resolve('done');
-        }, seconds * 1000);
-    });
-};
-exports.waitInSeconds = waitInSeconds;
-var connectionCheck = function (connection, retry) {
-    if (retry === void 0) { retry = 0; }
-    return __awaiter(void 0, void 0, void 0, function () {
-        var dbName, client, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    dbName = connection.split('/').pop();
-                    console.log("[postgres] trying to connect with the ".concat(dbName, " database..."));
-                    client = new pg_1.Client({
-                        connectionString: connection.replace('host.docker.internal', 'localhost')
-                    });
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 6, , 9]);
-                    return [4, client.connect()];
-                case 2:
-                    _a.sent();
-                    return [4, client
-                            .query("SELECT datname FROM pg_catalog.pg_database WHERE lower(datname) = lower('".concat(dbName, "');"))];
-                case 3:
-                    _a.sent();
-                    console.log("[postgres] connected with the ".concat(dbName, " database..."));
-                    return [4, client.end()];
-                case 4:
-                    _a.sent();
-                    return [4, (0, exports.waitInSeconds)(2)];
-                case 5:
-                    _a.sent();
-                    return [3, 9];
-                case 6:
-                    error_1 = _a.sent();
-                    console.log('[postgres] still initialising...');
-                    retry += 1;
-                    if (retry > 4) {
-                        console.log('> [postgres] is not responding, please check your docker logs');
-                        process.exit(1);
-                    }
-                    return [4, (0, exports.waitInSeconds)(5)];
-                case 7:
-                    _a.sent();
-                    return [4, (0, exports.connectionCheck)(connection, retry)];
-                case 8:
-                    _a.sent();
-                    return [3, 9];
-                case 9: return [2];
-            }
-        });
-    });
-};
-exports.connectionCheck = connectionCheck;
 function getSqlFilePath(containerController) {
     var fileName = "create_db.sql";
     return "".concat(containerController.getInitDbPath(), "/").concat(fileName);
