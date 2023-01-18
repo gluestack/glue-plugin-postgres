@@ -62,6 +62,7 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     if (instance) {
       await writeInstance(instance);
       await createFolder(`${instance.getInstallationPath()}/db`);
+      await createFolder(`${instance.getInstallationPath()}/init.db`);
     }
   }
 
