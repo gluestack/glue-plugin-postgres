@@ -3,7 +3,7 @@ import IApp from "@gluestack/framework/types/app/interface/IApp";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
 import { IPostgres } from "./interfaces/IPostgres";
-import { connectionCheck, writeDbCreateSql } from "./helpers/dbInit";
+import { writeDbCreateSql } from "./helpers/dbInit";
 import { defaultConfig } from "./commands/postgresConfig";
 
 export class PluginInstanceContainerController implements IContainerController {
@@ -152,7 +152,7 @@ export class PluginInstanceContainerController implements IContainerController {
   getConfig(): any {}
 
   async up() {
-    //
+    await writeDbCreateSql(this);
   }
 
   async down() {

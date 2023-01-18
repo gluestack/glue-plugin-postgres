@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.PluginInstanceContainerController = void 0;
 var DockerodeHelper = require("@gluestack/helpers").DockerodeHelper;
+var dbInit_1 = require("./helpers/dbInit");
 var postgresConfig_1 = require("./commands/postgresConfig");
 var PluginInstanceContainerController = (function () {
     function PluginInstanceContainerController(app, callerInstance) {
@@ -166,7 +167,12 @@ var PluginInstanceContainerController = (function () {
     PluginInstanceContainerController.prototype.up = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2];
+                switch (_a.label) {
+                    case 0: return [4, (0, dbInit_1.writeDbCreateSql)(this)];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
             });
         });
     };
