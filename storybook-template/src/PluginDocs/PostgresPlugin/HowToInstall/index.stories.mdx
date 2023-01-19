@@ -1,0 +1,52 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import PostgresScreenshot from "./assets/postgresScreenshot.png"
+
+<Meta title="Postgres Plugin Docs/How to install" />
+
+# How to install
+
+##
+
+<br/>
+
+* First go to your local terminal and type this command in order to install this plugin
+
+  <br/>
+
+    ```bash
+    $ node glue add postgres <instance-name>
+    ```
+
+  <br/>
+
+* For example, In my case I wanted to install **postgres plugin instance** with my instance
+  name as **“postgres”**, then I will follow this pattern to install postgres plugin instance in
+  my app:
+
+  <br/>
+  
+    ```bash
+    $ node glue add postgres postgres
+    ```
+    
+    Here my instance name is **postgres**.
+
+  <br/>
+
+* Now, after installing the dependency it will ask you for **database name, database username,
+  database password**. In my case I have provided it with default configuration.
+
+  Option will be something like this:
+    
+    <img src={PostgresScreenshot}/>
+    
+
+  <br/>
+
+* If the plugin is installed successfully then we can go and see that inside **backend** 
+  folder there is folder named “**database**” and inside that **database** folder, there
+  is a new folder which is named after our instance i.e. **postgres** is created. 
+  
+  Overall directory path for the **postgres plugin instance** will be something like this:
+  
+  **backend/database/postgres**

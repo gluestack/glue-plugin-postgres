@@ -1,0 +1,81 @@
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
+
+<Meta title="Postgres Plugin Docs/How It Works" />
+
+
+# How it works
+
+##
+
+<br/>
+
+* ## Working
+  
+  <br/>
+  
+  * **Postgres Plugin Instance** image will be running inside a docker container which
+  is managed by our **Engine** plugin.
+  
+  
+  <br/>
+  
+  
+  * Behind the scene what is happening is, when we have installed the postgres plugin and
+  configured it, our **Glue Engine Plugin** adds **postgres** image inside its docker file
+  and from there it runs the postgres image.
+  
+  
+  <br/>
+  
+  
+  * Our directory stucture for the **postgres plugin instance** will be something
+    like this:
+    <br/>
+
+    ```
+      📦databases
+        ┗ 📂postgres
+          ┗ 📜README.md
+    ```
+  <br/>
+  <br/>
+  
+  
+  * In order to start running this plugin we need to run the following command:
+    
+    <br/>
+  
+    ```bash
+      $ node glue develop:up
+    ```
+  
+    <br/>
+
+    This command will start running the docker image of all the instances
+    and plugin we have created. Here, in this case it will start running
+    our **postgres plugin instance**, inside our **Engine** container.
+  
+  <br/>
+  <br/>
+
+* ## Instructions to start development of auth plugin instance
+  
+  <br/>
+  
+  * In order to interact with **postgres plugin database**, we can install another
+  plugin named **Glue Plugin Graphql** which injects **Hasura Engine** which is
+  connected with our postgres database.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
