@@ -152,6 +152,7 @@ export class PluginInstanceContainerController implements IContainerController {
   getConfig(): any {}
 
   async up() {
+    await this.getPortNumber();
     await writeDbCreateSql(this);
   }
 
