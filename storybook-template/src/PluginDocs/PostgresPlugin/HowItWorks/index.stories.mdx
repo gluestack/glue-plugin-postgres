@@ -14,21 +14,21 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   <br/>
   
   * **Postgres Plugin Instance** image will be running inside a docker container which
-  is managed by our **Engine** plugin.
+  is managed by your **Backend-Engine** plugin.
   
   
   <br/>
   
   
-  * Behind the scene what is happening is, when we have installed the postgres plugin and
-  configured it, our **Glue Engine Plugin** adds **postgres** image inside its docker file
+  * Behind the scene what is happening is, when you have installed the postgres plugin and
+  configured it, your **Glue Backend-Engine Plugin** adds **postgres** image inside its docker file
   and from there it runs the postgres image.
   
   
   <br/>
   
   
-  * Our directory stucture for the **postgres plugin instance** will be something
+  * Your directory stucture for the **postgres plugin instance** will be something
     like this:
     <br/>
 
@@ -41,7 +41,7 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   <br/>
   
   
-  * In order to start running this plugin we need to run the following command:
+  * In order to start running this plugin you need to run the following command:
     
     <br/>
   
@@ -51,20 +51,21 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   
     <br/>
 
-    This command will start running the docker image of all the instances
-    and plugin we have created. Here, in this case it will start running
-    our **postgres plugin instance**, inside our **Engine** container.
+    This command will start running the docker container of all the instances
+    and plugin you have created. Here, in this case it will start running
+    your **postgres plugin instance** container, with the help of your **Backend-Engine
+    plugin instance**.
   
   <br/>
   <br/>
 
-* ## Instructions to start development of auth plugin instance
+* ## Instructions to start development with this plugin
   
   <br/>
   
-  * In order to interact with **postgres plugin database**, we can install another
+  * In order to interact with **postgres plugin database**, you can install another
   plugin named **Glue Plugin Graphql** which injects **Hasura Engine** which is
-  connected with our postgres database.
+  connected with your postgres database.
 
 
 
