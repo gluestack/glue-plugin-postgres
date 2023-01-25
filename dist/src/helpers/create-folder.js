@@ -38,13 +38,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.createFolder = void 0;
 var promises_1 = require("node:fs/promises");
+var file_exists_1 = require("./file-exists");
 var createFolder = function (path) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4, (0, promises_1.mkdir)(path, { recursive: true })];
+            case 0: return [4, (0, file_exists_1.fileExists)(path)];
             case 1:
+                if (!!(_a.sent())) return [3, 3];
+                return [4, (0, promises_1.mkdir)(path, { recursive: true })];
+            case 2:
                 _a.sent();
-                return [2];
+                _a.label = 3;
+            case 3: return [2];
         }
     });
 }); };

@@ -1,5 +1,8 @@
 import { mkdir } from "node:fs/promises";
+import { fileExists } from "./file-exists";
 
 export const createFolder = async (path: string): Promise<void> => {
-  await mkdir(path, { recursive: true });
+  if (! await fileExists(path)) {
+    await mkdir(path, { recursive: true });
+  }
 };
