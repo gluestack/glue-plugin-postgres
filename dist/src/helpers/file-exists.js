@@ -36,22 +36,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.createFolder = void 0;
+exports.fileExists = void 0;
 var promises_1 = require("node:fs/promises");
-var file_exists_1 = require("./file-exists");
-var createFolder = function (path) { return __awaiter(void 0, void 0, void 0, function () {
+var fileExists = function (path) { return __awaiter(void 0, void 0, void 0, function () {
+    var err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4, (0, file_exists_1.fileExists)(path)];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4, (0, promises_1.access)(path, promises_1.constants.R_OK)];
             case 1:
-                if (!!(_a.sent())) return [3, 3];
-                return [4, (0, promises_1.mkdir)(path, { recursive: true })];
-            case 2:
                 _a.sent();
-                _a.label = 3;
+                return [2, true];
+            case 2:
+                err_1 = _a.sent();
+                return [2, false];
             case 3: return [2];
         }
     });
 }); };
-exports.createFolder = createFolder;
-//# sourceMappingURL=create-folder.js.map
+exports.fileExists = fileExists;
+//# sourceMappingURL=file-exists.js.map

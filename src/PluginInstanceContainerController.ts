@@ -5,6 +5,7 @@ import IContainerController from "@gluestack/framework/types/plugin/interface/IC
 import { IPostgres } from "./interfaces/IPostgres";
 import { writeDbCreateSql } from "./helpers/dbInit";
 import { defaultConfig } from "./commands/postgresConfig";
+import { createFolder } from "./helpers/create-folder";
 
 export class PluginInstanceContainerController implements IContainerController {
   app: IApp;
@@ -153,6 +154,10 @@ export class PluginInstanceContainerController implements IContainerController {
 
   async up() {
     await this.getPortNumber();
+
+    await createFolder(`${this.callerInstance.getInstallationPath()}/db`);
+    await createFolder(`${this.callerInstance.getInstallationPath()}/init.db`);
+
     await writeDbCreateSql(this);
   }
 
