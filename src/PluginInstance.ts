@@ -64,7 +64,7 @@ export class PluginInstance
     if (db_config) {
       return `postgresql://${db_config.username}:${
         db_config.password
-      }@host.docker.internal:${await this.getContainerController().getPortNumber()}/${
+        }@${db_config.db_host}:${db_config.db_port}/${
         db_config.db_name
       }`;
     }

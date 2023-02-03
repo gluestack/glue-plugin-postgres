@@ -41,37 +41,69 @@ var prompts = require("prompts");
 exports.defaultConfig = {
     db_name: "my_first_db",
     username: "postgres",
-    password: "postgrespass"
+    password: "postgrespass",
+    db_host: "host.docker.internal",
+    db_port: "5432"
 };
 var getNewInstanceQuestions = function (oldConfig) {
     return [
         {
-            type: "text",
+            type: 'confirm',
+            name: "choice",
+            message: "Do you want to use external minio?",
+            initial: false
+        },
+        {
+            type: function (prev) { return (prev === true ? 'text' : null); },
             name: "db_name",
             message: "What would be your postgres database name?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.db_name) || exports.defaultConfig.db_name
         },
         {
-            type: "text",
+            type: function (prev) { return (prev ? 'text' : null); },
             name: "username",
             message: "What would be your postgres database username?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.username) || exports.defaultConfig.username
         },
         {
-            type: "text",
+            type: function (prev) { return (prev ? 'text' : null); },
             name: "password",
             message: "What would be your postgres database password?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.password) || exports.defaultConfig.password
         },
+        {
+            type: function (prev) { return (prev ? 'text' : null); },
+            name: "password",
+            message: "What would be your postgres database host?",
+            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.host) || exports.defaultConfig.db_host
+        },
+        {
+            type: function (prev) { return (prev ? 'text' : null); },
+            name: "password",
+            message: "What would be your postgres database port?",
+            initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.port) || exports.defaultConfig.db_port
+        },
     ];
 };
 var writeInstance = function (pluginInstance) { return __awaiter(void 0, void 0, void 0, function () {
-    var response;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var response, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0: return [4, prompts(getNewInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")))];
             case 1:
-                response = _a.sent();
+                response = _c.sent();
+                if (!!response.choice) return [3, 3];
+                response = exports.defaultConfig;
+                _a = response;
+                _b = "".concat;
+                return [4, pluginInstance.containerController.getPortNumber()];
+            case 2:
+                _a.db_port = _b.apply("", [_c.sent()]);
+                return [3, 4];
+            case 3:
+                delete response.choice;
+                _c.label = 4;
+            case 4:
                 Object.keys(response).forEach(function (key) { return response[key] = response[key].trim(); });
                 pluginInstance.gluePluginStore.set("db_config", response);
                 console.log();

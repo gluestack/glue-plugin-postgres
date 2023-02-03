@@ -66,17 +66,13 @@ var PluginInstance = (function () {
     };
     PluginInstance.prototype.getConnectionString = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db_config, _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        db_config = this.gluePluginStore.get("db_config");
-                        if (!db_config) return [3, 2];
-                        _b = (_a = "postgresql://".concat(db_config.username, ":").concat(db_config.password, "@host.docker.internal:")).concat;
-                        return [4, this.getContainerController().getPortNumber()];
-                    case 1: return [2, _b.apply(_a, [_c.sent(), "/"]).concat(db_config.db_name)];
-                    case 2: return [2, ""];
+            var db_config;
+            return __generator(this, function (_a) {
+                db_config = this.gluePluginStore.get("db_config");
+                if (db_config) {
+                    return [2, "postgresql://".concat(db_config.username, ":").concat(db_config.password, "@").concat(db_config.db_host, ":").concat(db_config.db_port, "/").concat(db_config.db_name)];
                 }
+                return [2, ""];
             });
         });
     };

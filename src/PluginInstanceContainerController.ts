@@ -44,6 +44,8 @@ export class PluginInstanceContainerController implements IContainerController {
       POSTGRES_USER: db_config.username,
       POSTGRES_PASSWORD: db_config.password,
       POSTGRES_DB: db_config.db_name,
+      POSTGRES_HOST: db_config.db_host,
+      POSTGRES_PORT: parseInt(db_config.db_port),
     };
   }
 
