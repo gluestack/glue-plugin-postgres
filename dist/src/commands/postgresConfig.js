@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,6 +50,7 @@ exports.__esModule = true;
 exports.postgresConfig = exports.writeInstance = exports.defaultConfig = void 0;
 var prompts = require("prompts");
 exports.defaultConfig = {
+    external: false,
     db_name: "my_first_db",
     username: "postgres",
     password: "postgrespass",
@@ -49,62 +61,74 @@ var getNewInstanceQuestions = function (oldConfig) {
     return [
         {
             type: 'confirm',
-            name: "choice",
-            message: "Do you want to use external minio?",
+            name: "external",
+            message: "Do you want to use external postgres?",
             initial: false
         },
         {
-            type: function (prev) { return (prev === true ? 'text' : null); },
+            type: 'text',
             name: "db_name",
             message: "What would be your postgres database name?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.db_name) || exports.defaultConfig.db_name
         },
         {
-            type: function (prev) { return (prev ? 'text' : null); },
+            type: 'text',
             name: "username",
             message: "What would be your postgres database username?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.username) || exports.defaultConfig.username
         },
         {
-            type: function (prev) { return (prev ? 'text' : null); },
+            type: 'text',
             name: "password",
             message: "What would be your postgres database password?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.password) || exports.defaultConfig.password
-        },
+        }
+    ];
+};
+var getExternalInstanceQuestions = function (oldConfig) {
+    return [
         {
-            type: function (prev) { return (prev ? 'text' : null); },
-            name: "password",
+            type: 'text',
+            name: "db_host",
             message: "What would be your postgres database host?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.host) || exports.defaultConfig.db_host
         },
         {
-            type: function (prev) { return (prev ? 'text' : null); },
-            name: "password",
+            type: 'text',
+            name: "db_port",
             message: "What would be your postgres database port?",
             initial: (oldConfig === null || oldConfig === void 0 ? void 0 : oldConfig.port) || exports.defaultConfig.db_port
         },
     ];
 };
 var writeInstance = function (pluginInstance) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, _a, _b;
+    var externalConfig, response, _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0: return [4, prompts(getNewInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")))];
             case 1:
                 response = _c.sent();
-                if (!!response.choice) return [3, 3];
-                response = exports.defaultConfig;
+                if (!response.external) return [3, 3];
+                return [4, prompts(getExternalInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")))];
+            case 2:
+                externalConfig = _c.sent();
+                _c.label = 3;
+            case 3:
+                if (!!response.external) return [3, 5];
+                response.db_host = exports.defaultConfig.db_host;
                 _a = response;
                 _b = "".concat;
                 return [4, pluginInstance.containerController.getPortNumber()];
-            case 2:
-                _a.db_port = _b.apply("", [_c.sent()]);
-                return [3, 4];
-            case 3:
-                delete response.choice;
-                _c.label = 4;
             case 4:
-                Object.keys(response).forEach(function (key) { return response[key] = response[key].trim(); });
+                _a.db_port = _b.apply("", [_c.sent()]);
+                return [3, 6];
+            case 5:
+                response = __assign(__assign({}, response), externalConfig);
+                _c.label = 6;
+            case 6:
+                Object.keys(response).forEach(function (key) {
+                    return key !== 'external' ? response[key] = response[key].trim() : response[key];
+                });
                 pluginInstance.gluePluginStore.set("db_config", response);
                 console.log();
                 console.log("Saved ".concat(pluginInstance.getName(), " config"));
