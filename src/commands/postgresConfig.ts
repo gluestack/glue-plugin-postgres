@@ -11,6 +11,7 @@ interface IQuestion {
 }
 
 export const defaultConfig = {
+  external: false,
   db_name: "my_first_db",
   username: "postgres",
   password: "postgrespass",
@@ -22,37 +23,42 @@ const getNewInstanceQuestions = (oldConfig: any): IQuestion[] => {
   return [
     {
       type: 'confirm',
-      name: "choice",
-      message: "Do you want to use external minio?",
+      name: "external",
+      message: "Do you want to use external postgres?",
       initial: false
     },
     {
-      type: (prev: any) => (prev === true ? 'text' : null),
+      type: 'text',
       name: "db_name",
       message: "What would be your postgres database name?",
       initial: oldConfig?.db_name || defaultConfig.db_name,
     },
     {
-      type: (prev: any) => (prev ? 'text' : null),
+      type: 'text',
       name: "username",
       message: "What would be your postgres database username?",
       initial: oldConfig?.username || defaultConfig.username,
     },
     {
-      type: (prev: any) => (prev ? 'text' : null),
+      type: 'text',
       name: "password",
       message: "What would be your postgres database password?",
       initial: oldConfig?.password || defaultConfig.password,
-    },
+    }
+  ];
+};
+
+const getExternalInstanceQuestions = (oldConfig: any): IQuestion[] => {
+  return [
     {
-      type: (prev: any) => (prev ? 'text' : null),
-      name: "password",
+      type: 'text',
+      name: "db_host",
       message: "What would be your postgres database host?",
       initial: oldConfig?.host || defaultConfig.db_host,
     },
     {
-      type: (prev: any) => (prev ? 'text' : null),
-      name: "password",
+      type: 'text',
+      name: "db_port",
       message: "What would be your postgres database port?",
       initial: oldConfig?.port || defaultConfig.db_port,
     },
@@ -60,19 +66,28 @@ const getNewInstanceQuestions = (oldConfig: any): IQuestion[] => {
 };
 
 export const writeInstance = async (pluginInstance: PluginInstance) => {
+  let externalConfig;
   let response = await prompts(
     getNewInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")),
   );
 
-  if (!response.choice) {
-    response = defaultConfig;
+  if (response.external) {
+    externalConfig = await prompts(
+      getExternalInstanceQuestions(pluginInstance.gluePluginStore.get("db_config")),
+    );
+  }
+
+  if (!response.external) {
+    response.db_host = defaultConfig.db_host;
     response.db_port = `${await pluginInstance.containerController.getPortNumber()}`;
   } else {
-    delete response.choice;
+    response = { ...response, ...externalConfig };
   }
 
   // trim the values in an object
-  Object.keys(response).forEach(key => response[key] = response[key].trim());
+  Object.keys(response).forEach(key =>
+    key !== 'external' ? response[key] = response[key].trim() : response[key]
+  );
 
   pluginInstance.gluePluginStore.set("db_config", response);
   console.log();
