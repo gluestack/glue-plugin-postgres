@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { Client } from "pg";
+
 import {
   PluginInstanceContainerController
 } from "../PluginInstanceContainerController";

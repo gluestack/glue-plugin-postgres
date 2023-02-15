@@ -78,7 +78,7 @@ export const writeInstance = async (pluginInstance: PluginInstance) => {
   }
 
   if (!response.external) {
-    response.db_host = defaultConfig.db_host;
+    response.db_host = pluginInstance.getName();
     response.db_port = `${await pluginInstance.containerController.getPortNumber()}`;
   } else {
     response = { ...response, ...externalConfig };
@@ -90,6 +90,7 @@ export const writeInstance = async (pluginInstance: PluginInstance) => {
   );
 
   pluginInstance.gluePluginStore.set("db_config", response);
+
   console.log();
   console.log(`Saved ${pluginInstance.getName()} config`);
   console.table(response);
