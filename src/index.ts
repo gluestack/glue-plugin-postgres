@@ -9,7 +9,8 @@ import IManagesInstances from "@gluestack/framework/types/plugin/interface/IMana
 import IGlueStorePlugin from "@gluestack/framework/types/store/interface/IGluePluginStore";
 import { postgres } from "./commands/postgres";
 import { writeInstance } from "./commands/postgresConfig";
-import { createFolder } from "./helpers/create-folder";
+
+const { createFolder } = require("@gluestack/helpers");
 
 //Do not edit the name of this class
 export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {

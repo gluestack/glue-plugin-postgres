@@ -40,7 +40,7 @@ exports.PluginInstanceContainerController = void 0;
 var DockerodeHelper = require("@gluestack/helpers").DockerodeHelper;
 var dbInit_1 = require("./helpers/dbInit");
 var postgresConfig_1 = require("./commands/postgresConfig");
-var create_folder_1 = require("./helpers/create-folder");
+var createFolder = require("@gluestack/helpers").createFolder;
 var PluginInstanceContainerController = (function () {
     function PluginInstanceContainerController(app, callerInstance) {
         this.status = "down";
@@ -174,10 +174,10 @@ var PluginInstanceContainerController = (function () {
                     case 0: return [4, this.getPortNumber()];
                     case 1:
                         _a.sent();
-                        return [4, (0, create_folder_1.createFolder)("".concat(this.callerInstance.getInstallationPath(), "/db"))];
+                        return [4, createFolder("".concat(this.callerInstance.getInstallationPath(), "/db"))];
                     case 2:
                         _a.sent();
-                        return [4, (0, create_folder_1.createFolder)("".concat(this.callerInstance.getInstallationPath(), "/init.db"))];
+                        return [4, createFolder("".concat(this.callerInstance.getInstallationPath(), "/init.db"))];
                     case 3:
                         _a.sent();
                         return [4, (0, dbInit_1.writeDbCreateSql)(this)];
