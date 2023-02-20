@@ -16,7 +16,7 @@ const { createFolder } = require("@gluestack/helpers");
 export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
   app: IApp;
   instances: IInstance[];
-  type: "stateless" | "stateful" | "devonly" = "stateful";
+  type: "stateless" | "stateful" | "devonly" = "devonly";
   gluePluginStore: IGlueStorePlugin;
 
   constructor(app: IApp, gluePluginStore: IGlueStorePlugin) {
