@@ -1,6 +1,6 @@
 {
     "name": "@gluestack/glue-plugin-postgres",
-    "version": "0.0.23",
+    "version": "0.0.24",
     "description": "gluestack plugin for postgres",
     "repository": {
         "type": "git",
@@ -31,7 +31,6 @@
         "typescript": "^4.9.5"
     },
     "peerDependencies": {
-        "@gluestack/framework": "^0.0.x",
-        "@gluestack/glue-plugin-backend-engine": "^0.0.x"
+        "@gluestack/glue-plugin-engine": "^0.0.x"
     }
 }
