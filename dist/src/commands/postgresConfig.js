@@ -47,8 +47,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.postgresConfig = exports.writeInstance = exports.defaultConfig = void 0;
+exports.postgresConfig = exports.writeInstance = exports.defaultConfig = exports.runner = void 0;
 var prompts = require("prompts");
+function runner(program, glueStackPlugin) {
+    var _this = this;
+    var command = program
+        .command("postgres:config")
+        .description("Update config of a postgres instance")
+        .action(function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2, postgresConfig(glueStackPlugin)];
+    }); }); });
+}
+exports.runner = runner;
 exports.defaultConfig = {
     external: false,
     db_name: "my_first_db",

@@ -7,10 +7,11 @@ import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import ILifeCycle from "@gluestack/framework/types/plugin/interface/ILifeCycle";
 import IManagesInstances from "@gluestack/framework/types/plugin/interface/IManagesInstances";
 import IGlueStorePlugin from "@gluestack/framework/types/store/interface/IGluePluginStore";
-import { postgres } from "./commands/postgres";
-import { writeInstance } from "./commands/postgresConfig";
 
-const { createFolder } = require("@gluestack/helpers");
+import { runner as postgresList } from "./commands/postgresList";
+import { runner as postgresConfig, writeInstance } from "./commands/postgresConfig";
+
+import { createFolder } from "@gluestack/helpers";
 
 //Do not edit the name of this class
 export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
@@ -26,7 +27,8 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
   }
 
   init() {
-    this.app.addCommand((program: any) => postgres(program, this));
+    this.app.addCommand((program: any) => postgresList(program, this));
+    this.app.addCommand((program: any) => postgresConfig(program, this));
   }
 
   destroy() {

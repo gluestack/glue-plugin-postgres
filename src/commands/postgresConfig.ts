@@ -1,7 +1,14 @@
 const prompts = require("prompts");
 import { GlueStackPlugin } from "../";
-import { PluginInstance } from "..//PluginInstance";
+import { PluginInstance } from "../PluginInstance";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
+
+export function runner(program: any, glueStackPlugin: GlueStackPlugin) {
+  const command = program
+    .command("postgres:config")
+    .description("Update config of a postgres instance")
+    .action(async () => postgresConfig(glueStackPlugin));
+}
 
 interface IQuestion {
   type: any;

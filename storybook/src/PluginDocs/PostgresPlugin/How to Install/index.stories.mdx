@@ -1,0 +1,32 @@
+---
+title: How to install | Postgres
+description: How to install | Postgres
+---
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs';
+
+
+<Meta title="Postgres Plugin/How to Install" />
+
+# How to install
+
+To add postgres into your gluestack project, you can run the following command in project's root directory:
+```sh
+$ node glue add postgres <instance-name>
+```
+
+For instance, let's install an instance named **postgres** in our gluestack project:
+```sh
+$ node glue add postgres postgres
+```
+
+After that, you will be prompted with following question - "_Do you want to use external postgres? (yes/no)_"<br/>
+If you want to use your own custom postgres server, you can type yes or if you want to use postgres within gluestack - you can go with no.<br/>
+
+And after that, you will be prompted for **database name, database username, database password**.
+
+Here's how the console output looks like:
+
+<img src='/assets/postgres-screenshot.png' />
+
+Your plugin instance will be installed within **backend/databases** directory.

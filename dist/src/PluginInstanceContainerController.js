@@ -37,10 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.PluginInstanceContainerController = void 0;
-var DockerodeHelper = require("@gluestack/helpers").DockerodeHelper;
+var helpers_1 = require("@gluestack/helpers");
 var dbInit_1 = require("./helpers/dbInit");
 var postgresConfig_1 = require("./commands/postgresConfig");
-var createFolder = require("@gluestack/helpers").createFolder;
 var PluginInstanceContainerController = (function () {
     function PluginInstanceContainerController(app, callerInstance) {
         this.status = "down";
@@ -134,7 +133,7 @@ var PluginInstanceContainerController = (function () {
                             return resolve(_this.portNumber);
                         }
                         var ports = _this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-                        DockerodeHelper.getPort(5432, ports)
+                        helpers_1.DockerodeHelper.getPort(5432, ports)
                             .then(function (port) {
                             _this.setPortNumber(port);
                             ports.push(port);
@@ -174,10 +173,10 @@ var PluginInstanceContainerController = (function () {
                     case 0: return [4, this.getPortNumber()];
                     case 1:
                         _a.sent();
-                        return [4, createFolder("".concat(this.callerInstance.getInstallationPath(), "/db"))];
+                        return [4, (0, helpers_1.createFolder)("".concat(this.callerInstance.getInstallationPath(), "/db"))];
                     case 2:
                         _a.sent();
-                        return [4, createFolder("".concat(this.callerInstance.getInstallationPath(), "/init.db"))];
+                        return [4, (0, helpers_1.createFolder)("".concat(this.callerInstance.getInstallationPath(), "/init.db"))];
                     case 3:
                         _a.sent();
                         return [4, (0, dbInit_1.writeDbCreateSql)(this)];

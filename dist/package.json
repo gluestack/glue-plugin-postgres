@@ -1,6 +1,6 @@
 {
     "name": "@gluestack/glue-plugin-postgres",
-    "version": "0.0.24",
+    "version": "0.0.25",
     "description": "gluestack plugin for postgres",
     "repository": {
         "type": "git",
@@ -10,7 +10,6 @@
         "npm",
         "glue-plugin-postgres"
     ],
-    "author": "Shivam Singhal",
     "license": "ISC",
     "main": "dist/src/index.js",
     "scripts": {

@@ -42,9 +42,9 @@ exports.__esModule = true;
 exports.GlueStackPlugin = void 0;
 var package_json_1 = __importDefault(require("../package.json"));
 var PluginInstance_1 = require("./PluginInstance");
-var postgres_1 = require("./commands/postgres");
+var postgresList_1 = require("./commands/postgresList");
 var postgresConfig_1 = require("./commands/postgresConfig");
-var createFolder = require("@gluestack/helpers").createFolder;
+var helpers_1 = require("@gluestack/helpers");
 var GlueStackPlugin = (function () {
     function GlueStackPlugin(app, gluePluginStore) {
         this.type = "devonly";
@@ -54,7 +54,8 @@ var GlueStackPlugin = (function () {
     }
     GlueStackPlugin.prototype.init = function () {
         var _this = this;
-        this.app.addCommand(function (program) { return (0, postgres_1.postgres)(program, _this); });
+        this.app.addCommand(function (program) { return (0, postgresList_1.runner)(program, _this); });
+        this.app.addCommand(function (program) { return (0, postgresConfig_1.runner)(program, _this); });
     };
     GlueStackPlugin.prototype.destroy = function () {
     };
@@ -85,10 +86,10 @@ var GlueStackPlugin = (function () {
                         return [4, (0, postgresConfig_1.writeInstance)(instance)];
                     case 2:
                         _a.sent();
-                        return [4, createFolder("".concat(instance.getInstallationPath(), "/db"))];
+                        return [4, (0, helpers_1.createFolder)("".concat(instance.getInstallationPath(), "/db"))];
                     case 3:
                         _a.sent();
-                        return [4, createFolder("".concat(instance.getInstallationPath(), "/init.db"))];
+                        return [4, (0, helpers_1.createFolder)("".concat(instance.getInstallationPath(), "/init.db"))];
                     case 4:
                         _a.sent();
                         _a.label = 5;

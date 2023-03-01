@@ -1,12 +1,11 @@
-const { DockerodeHelper } = require("@gluestack/helpers");
 import IApp from "@gluestack/framework/types/app/interface/IApp";
+import { DockerodeHelper, createFolder } from "@gluestack/helpers";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
+
 import { IPostgres } from "./interfaces/IPostgres";
 import { writeDbCreateSql } from "./helpers/dbInit";
 import { defaultConfig } from "./commands/postgresConfig";
-
-const { createFolder } = require("@gluestack/helpers");
 
 export class PluginInstanceContainerController implements IContainerController {
   app: IApp;

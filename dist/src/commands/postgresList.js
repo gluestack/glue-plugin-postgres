@@ -47,7 +47,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.postgresList = void 0;
+exports.postgresList = exports.runner = void 0;
+function runner(program, glueStackPlugin) {
+    var _this = this;
+    var command = program
+        .command("postgres:list")
+        .description("List installed postgres instances")
+        .action(function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2, postgresList(glueStackPlugin)];
+    }); }); });
+}
+exports.runner = runner;
 function postgresList(glueStackPlugin) {
     return __awaiter(this, void 0, void 0, function () {
         var arr;

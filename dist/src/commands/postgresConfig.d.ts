@@ -1,5 +1,6 @@
 import { GlueStackPlugin } from "../";
-import { PluginInstance } from "..//PluginInstance";
+import { PluginInstance } from "../PluginInstance";
+export declare function runner(program: any, glueStackPlugin: GlueStackPlugin): void;
 export declare const defaultConfig: {
     external: boolean;
     db_name: string;
