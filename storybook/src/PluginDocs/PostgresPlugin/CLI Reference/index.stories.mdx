@@ -9,46 +9,30 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
 # CLI Reference
 
-##
-
-
-  <summary>
-    <strong> postgres</strong>
-  </summary>
+## Postgres
 
   <br/>
 
-  * This command will show the list of available commands with postgres instance.
+  * This command will display a list of available commands for the **postgres instance**. To execute this command using your **Gluestack App**, please run the following command:
 
-    In order to run this command with your **Gluestack App**, you need to run the below
-    command:
+    <br/>
+
+  * To display the list of **postgres instances** that have been installed, please use the following command:
 
     <br/>
 
     ```bash
-    $ node glue postgres
+    $ node glue postgres:list
     ```
 
     <br/>
 
-  * In order show the list of installed **postgres instance** you need to run the following
-    command:
+  * To modify the **configuration** of your **postgres instance**, please use the following command:
 
     <br/>
 
     ```bash
-    $ node glue postgres list
-    ```
-
-    <br/>
-
-  * Inorder to change **configuration** of your **postgres instance** you need to run the
-    following command:
-
-    <br/>
-
-    ```bash
-    $ node glue postgres config
+    $ node glue postgres:config
     ```
 
     <br/>
