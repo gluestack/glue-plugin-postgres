@@ -125,7 +125,7 @@ var writeInstance = function (pluginInstance) { return __awaiter(void 0, void 0,
                 _c.label = 3;
             case 3:
                 if (!!response.external) return [3, 5];
-                response.db_host = pluginInstance.getName();
+                response.db_host = exports.defaultConfig.db_host;
                 _a = response;
                 _b = "".concat;
                 return [4, pluginInstance.containerController.getPortNumber()];

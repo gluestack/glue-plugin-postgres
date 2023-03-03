@@ -85,7 +85,7 @@ export const writeInstance = async (pluginInstance: PluginInstance) => {
   }
 
   if (!response.external) {
-    response.db_host = pluginInstance.getName();
+    response.db_host = defaultConfig.db_host;
     response.db_port = `${await pluginInstance.containerController.getPortNumber()}`;
   } else {
     response = { ...response, ...externalConfig };
