@@ -21,5 +21,5 @@ export declare class PluginInstance implements IInstance, ILifeCycle, IHasContai
     getCallerPlugin(): IPlugin;
     getInstallationPath(): string;
     getContainerController(): IContainerController;
-    getConnectionString(): Promise<string>;
+    getConnectionString(): string;
 }

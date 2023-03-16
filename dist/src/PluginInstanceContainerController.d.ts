@@ -17,6 +17,7 @@ export declare class PluginInstanceContainerController implements IContainerCont
         POSTGRES_DB: string;
         POSTGRES_HOST: string;
         POSTGRES_PORT: number;
+        POSTGRES_STRING: any;
     };
     getDockerJson(): Promise<{
         Image: string;

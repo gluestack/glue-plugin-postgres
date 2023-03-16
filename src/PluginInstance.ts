@@ -59,7 +59,7 @@ export class PluginInstance
     return this.containerController;
   }
 
-  async getConnectionString() {
+  getConnectionString() {
     let db_config = this.gluePluginStore.get("db_config");
     if (db_config) {
       return `postgresql://${db_config.username}:${

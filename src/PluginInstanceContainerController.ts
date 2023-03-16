@@ -46,6 +46,7 @@ export class PluginInstanceContainerController implements IContainerController {
       POSTGRES_DB: db_config.db_name,
       POSTGRES_HOST: db_config.db_host,
       POSTGRES_PORT: parseInt(db_config.db_port),
+      POSTGRES_STRING: this.callerInstance.getConnectionString(),
     };
   }
 

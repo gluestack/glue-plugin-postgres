@@ -49,6 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.postgresConfig = exports.writeInstance = exports.defaultConfig = exports.runner = void 0;
 var prompts = require("prompts");
+var write_env_1 = require("../helpers/write-env");
 function runner(program, glueStackPlugin) {
     var _this = this;
     var command = program
@@ -144,6 +145,9 @@ var writeInstance = function (pluginInstance) { return __awaiter(void 0, void 0,
                 console.log("Saved ".concat(pluginInstance.getName(), " config"));
                 console.table(response);
                 console.log();
+                return [4, (0, write_env_1.writeEnv)(pluginInstance)];
+            case 7:
+                _c.sent();
                 return [2];
         }
     });

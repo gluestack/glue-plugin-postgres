@@ -2,6 +2,7 @@ const prompts = require("prompts");
 import { GlueStackPlugin } from "../";
 import { PluginInstance } from "../PluginInstance";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
+import { writeEnv } from "../helpers/write-env";
 
 export function runner(program: any, glueStackPlugin: GlueStackPlugin) {
   const command = program
@@ -102,6 +103,7 @@ export const writeInstance = async (pluginInstance: PluginInstance) => {
   console.log(`Saved ${pluginInstance.getName()} config`);
   console.table(response);
   console.log();
+  await writeEnv(pluginInstance);
 };
 
 async function selectInstance(pluginInstances: IInstance[]) {
