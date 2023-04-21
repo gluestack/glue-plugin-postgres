@@ -23,7 +23,7 @@ export const defaultConfig = {
   db_name: "my_first_db",
   username: "postgres",
   password: "postgrespass",
-  db_host: "host.docker.internal",
+  db_host: "postgres",
   db_port: "5432"
 };
 
